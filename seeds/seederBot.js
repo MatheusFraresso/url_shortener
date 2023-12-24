@@ -1,0 +1,141 @@
+// simple script to seed database
+const topSites = require('./top-sites.json');
+const { MongoClient } = require('mongodb');
+const possibleDigits = [
+  '1',
+  '2',
+  '3',
+  '4',
+  '5',
+  '6',
+  '7',
+  '8',
+  '9',
+  '0',
+  '!',
+  '@',
+  '$',
+  '%',
+  '¨',
+  '&',
+  '*',
+  '(',
+  ')',
+  '-',
+  '_',
+  '+',
+  '=',
+  '§',
+  '¹',
+  '²',
+  '³',
+  '£',
+  '¢',
+  '{',
+  '[',
+  'ª',
+  '´',
+  '`',
+  '^',
+  '~',
+  ']',
+  '}',
+  'º',
+  ',',
+  '.',
+  '<',
+  '>',
+  '|',
+  ';',
+  ':',
+  'A',
+  'B',
+  'C',
+  'D',
+  'E',
+  'F',
+  'G',
+  'H',
+  'I',
+  'J',
+  'K',
+  'L',
+  'M',
+  'N',
+  'O',
+  'P',
+  'Q',
+  'R',
+  'S',
+  'T',
+  'U',
+  'V',
+  'X',
+  'W',
+  'Y',
+  'Z',
+  'a',
+  'b',
+  'c',
+  'd',
+  'e',
+  'f',
+  'g',
+  'h',
+  'i',
+  'k',
+  'l',
+  'm',
+  'n',
+  'o',
+  'p',
+  'q',
+  'r',
+  's',
+  't',
+  'u',
+  'v',
+  'x',
+  'w',
+  'y',
+  'z',
+];
+// dotenv not working for some dependency reason
+const mongo = new MongoClient(
+  'mongodb+srv://matheusmfraresso:Lj8fAcrpThi5MhVc@bluecodingtest.8b49bjb.mongodb.net/bluecodingtest_db',
+);
+
+function idToUrl(id) {
+  let shortened_url = '';
+
+  while (id >= 1) {
+    const nextIndex =
+      id % possibleDigits.length === 0 ? id : id % possibleDigits.length;
+    shortened_url += possibleDigits[nextIndex - 1];
+    id =
+      id === possibleDigits.length ? 0 : Math.floor(id / possibleDigits.length);
+  }
+
+  return shortened_url.split('').reverse().join('');
+}
+
+async function seed() {
+  await mongo.connect();
+
+  const routes = mongo.db('bluecodingtest_db').collection('routes');
+  const counter = mongo.db('bluecodingtest_db').collection('counters');
+  const sequenceNumber = await counter.findOne();
+  let currentId = sequenceNumber.seq_value + 1;
+  for (const site of topSites) {
+    const route = await routes.insertOne({
+      long_url: `https://www.${site.rootDomain}`,
+      short_url: idToUrl(currentId),
+    });
+    currentId++;
+  }
+  console.log('Finished seeding database CTRL+C to');
+}
+
+seed();
+
+mongo.close();
