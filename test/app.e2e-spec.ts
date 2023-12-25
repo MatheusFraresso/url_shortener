@@ -28,6 +28,11 @@ describe('AppController (e2e)', () => {
       .send({ long_url: 'https://stackoverflow.com/' })
       .expect(HttpStatus.CREATED);
   });
+  it('/ (GET)', () => {
+    return request(app.getHttpServer())
+      .get('/routes/1')
+      .expect(HttpStatus.FOUND);
+  });
   it('/ (POST)', () => {
     return request(app.getHttpServer())
       .post('/routes')
@@ -51,11 +56,6 @@ describe('AppController (e2e)', () => {
       .post('/routes')
       .send({ long_url: 'https://stackoverflow.com/' })
       .expect(HttpStatus.CONFLICT);
-  });
-  it('/ (GET)', () => {
-    return request(app.getHttpServer())
-      .get('/routes/1')
-      .expect(HttpStatus.FOUND);
   });
   it('/ (GET)', () => {
     return request(app.getHttpServer())

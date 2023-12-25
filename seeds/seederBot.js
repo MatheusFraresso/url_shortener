@@ -100,24 +100,51 @@ const possibleDigits = [
   'y',
   'z',
 ];
+
+/**
+ * Algorithm adaptaded from https://members.loria.fr/PZimmermann/mca/mca-cup-0.5.9.pdf page 39
+ *
+ * @param {number} id integer to convert
+ * @param {number} base new base
+ * @param {Object} finalString workaround javascript not allowing simple variables pass by reference
+ * @return {string} converted value
+ */
+function fastIntegerOutput(id, base, finalString) {
+  if (id <= base) return possibleDigits[id - 1];
+  else {
+    const quotient = Math.floor(id / base);
+    const rest = id % base;
+    finalString.result += fastIntegerOutput(
+      rest === 0 ? quotient + -1 : quotient,
+      base,
+      finalString,
+    );
+    finalString.result += fastIntegerOutput(
+      rest === 0 ? base : rest,
+      base,
+      finalString,
+    );
+    return finalString.result;
+  }
+}
+
+/**
+ *
+ *
+ * @export
+ * @param {number} id
+ * @return {string} shortened_url
+ */
+function idToUrl(id) {
+  const shortened_url = fastIntegerOutput(id, possibleDigits.length, {
+    result: '',
+  });
+  return shortened_url;
+}
 // dotenv not working for some dependency reason
 const mongo = new MongoClient(
   'mongodb+srv://matheusmfraresso:Lj8fAcrpThi5MhVc@bluecodingtest.8b49bjb.mongodb.net/bluecodingtest_db',
 );
-
-function idToUrl(id) {
-  let shortened_url = '';
-
-  while (id >= 1) {
-    const nextIndex =
-      id % possibleDigits.length === 0 ? id : id % possibleDigits.length;
-    shortened_url += possibleDigits[nextIndex - 1];
-    id =
-      id === possibleDigits.length ? 0 : Math.floor(id / possibleDigits.length);
-  }
-
-  return shortened_url.split('').reverse().join('');
-}
 
 async function seed() {
   await mongo.connect();

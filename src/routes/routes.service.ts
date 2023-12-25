@@ -7,7 +7,7 @@ import { Counter } from './entities/counter.schema';
 import { Response } from 'express';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import urlMetadata from 'url-metadata';
-import idToUrl from 'src/routes/utils/idToUrl';
+import idToUrl from '../../utils/idToUrl';
 
 @Injectable()
 export class RoutesService {

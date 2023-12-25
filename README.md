@@ -128,10 +128,25 @@ To fetch the 100 most used requests, ypu can use the GET method with the endpoin
 ]
 ```
 
+## Information
+
 # Background title job
 
 Cron was used to schedule a job every 10 seconds fetching all routes from the database and urlMetadata was used to parse the web page and find it's title.
 
 # Database
 
-For this project I have choosen MongoDb since it's easyer to deploy and has a nice interation with NestJs (https://docs.nestjs.com/techniques/mongodb), it also negates the need for migrations, making it easier for the end user (in this case you guys)
+For this project I have choosen MongoDb with Mongoose ODM since it's easyer to deploy and has a nice interation with NestJs (https://docs.nestjs.com/techniques/mongodb), it also negates the need for migrations, making it easier for the end user (in this case you guys)
+
+## The Solution
+
+# The alphabet
+
+This was a little hard to decide, I knew that the more characters existing in the alphabet the more efficient the shortener algorithm would be, so I thour about several solutions
+
+1. ASCII table-> having 256 character alphabet, the ASCII table seemed a nice choice at the beggining. But the existence of several characters that would break the URL made this a bad choice for the task
+2. HTTP url encode characters(https://www.w3schools.com/tags/ref_urlencode.ASP) -> Thisreference provided me with the most characters, but then found another problem that the ASCII sulutions would face too. Some characters could not be typed with normal keyboards, or needed some pretty convoluted shortcuts to be used. So also thinking about testing and user friendliness i stepped away from this solution
+3. Normal [a-z] alphabet with, but implementing huffman compression. The problem with this solution is that for the compression to be worth it, I would have to use a less diverse alphabet, and the compression would compress only about 38% (https://web.stanford.edu/class/archive/cs/cs106b/cs106b.1176/assnFiles/assign6/huffman-encoding-supplement.pdf) of the string size. But since the options of encoding rise exponentially adding more characters, It would be more efficient to use a bigger alphabet (that would be more difficult to compress). The are some cases that the compression would be better, such as several equal characters back to back, but this cases are not common.
+4. So the final alphabet chosen was all the characters that could be typed in a common western keyboard, using and nos using the SHIFT and AltGr functions, having the final character count being 96. With this alphabet we could store 96^n, n being the size of the short url, and the user would be able to fetch the urls without searching for characters online or breaking the url on search
+
+# Url Shortener algorithm
