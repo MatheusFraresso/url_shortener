@@ -1,3 +1,51 @@
+## Challenge
+
+
+Your mission, should you choose to accept it, is to make a URL shortener API. Feel free to use any of the tools you are most familiar with.
+
+
+
+CORE REQUIREMENTS
+
+
+This could be built as a full stack solution or as a API solution:
+
+• We must be able to post a URL into a route/endpoint and get back a new URL with the shortest possible length.
+
+
+• We must be redirected to the full URL when we enter/send the short URL in a form/endpoint (ex:
+
+http://localhost:3000/a => https://google.com)
+
+
+• There should be an endpoint that returns top 100 most frequently
+
+accessed URLs.
+
+
+• There must be a background job that crawls the URL being shortened, pulls the HTML <title> tag from the website, and stores it.
+
+
+
+• Display the title with the URL on the top 100 endpoint.
+
+
+• There must be a README that explains how to set up the application and
+
+the algorithm used for generating the URL shortcode.
+
+
+NICE TO HAVE: 
+
+
+Write a bot to populate your DB, and include it in the source code (optional)
+
+Write Unit or Integration Tests
+
+
+Hint:
+To build the shortening algorithm, an optimal one, you can take a look at this thread.
+
 ## Author
 
 Matheus Mendes de Morais Fraresso
